@@ -104,5 +104,7 @@ Finally:
     ``chptr is a constant pointer to a char volatile.''  
 Practice this rule with the examples found in K&R II on page 122.  
 
-
+## Readable signal
+    typedef void (*sighandler_t)(int);
+    sighandler_t signal(int signum, sighandler_t handler);
 
