@@ -1,0 +1,137 @@
+
+" 定义快捷键的前缀，即<Leader>
+let mapleader="s"
+
+set nu
+"ctrl+s save file
+nmap <C-S> :w!<CR>i
+vmap <C-S> <C-C>:w!<CR>
+imap <C-S> <Esc>:w!<CR>i
+nmap q :q<CR>
+nmap lb 0
+nmap le $
+
+filetype plugin indent on
+" show existing tab with 2 spaces width
+set tabstop=2
+" when indenting with '>', use 2 spaces width
+set shiftwidth=2
+" On pressing tab, insert 2 spaces
+set expandtab
+
+set hlsearch
+
+filetype off
+set rtp+=~/.vim/bundle/Vundle.vim
+
+call vundle#begin()
+
+Plugin 'vim-scripts/taglist.vim'
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'altercation/vim-colors-solarized'
+Plugin 'tomasr/molokai'
+Plugin 'vim-scripts/phd'
+Plugin 'Lokaltog/vim-powerline'
+Plugin 'octol/vim-cpp-enhanced-highlight'
+Plugin 'nathanaelkane/vim-indent-guides'
+Plugin 'derekwyatt/vim-fswitch'
+Plugin 'kshenoy/vim-signature'
+Plugin 'vim-scripts/BOOKMARKS--Mark-and-Highlight-Full-Lines'
+Plugin 'majutsushi/tagbar'
+Plugin 'vim-scripts/indexer.tar.gz'
+Plugin 'vim-scripts/DfrankUtil'
+Plugin 'vim-scripts/vimprj'
+Plugin 'dyng/ctrlsf.vim'
+Plugin 'terryma/vim-multiple-cursors'
+Plugin 'scrooloose/nerdcommenter'
+Plugin 'vim-scripts/DrawIt'
+Plugin 'SirVer/ultisnips'
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'derekwyatt/vim-protodef'
+Plugin 'scrooloose/nerdtree'
+Plugin 'fholgado/minibufexpl.vim'
+Plugin 'gcmt/wildfire.vim'
+Plugin 'sjl/gundo.vim'
+Plugin 'Lokaltog/vim-easymotion'
+Plugin 'suan/vim-instant-markdown'
+Plugin 'iamcco/markdown-preview.vim'
+Plugin 'iamcco/mathjax-support-for-mkdp'
+Plugin 'thinktainer/omnicppcomplete'
+"Plugin 'lilydjwg/fcitx.vim'
+
+call vundle#end()
+filetype plugin indent on
+
+let Tlist_Show_One_File=1
+let Tlist_Exit_OnlyWindow=1
+noremap <F10> :TlistToggle<CR>
+
+let NERDTreeWinPos='right'
+let NERDTreeWinSize=60
+noremap <F9> :NERDTreeToggle<CR>
+
+if has("cscope")
+    set csprg=/usr/bin/cscope
+    set csto=0
+    set cst
+    set nocsverb
+    "set cscopequickfix=c-,d-,e-,f-,g-,i-,s-,t-
+    if filereadable("cscope.out")
+        cs add cscope.out
+    elseif $CSCOPE_DB != ""
+        cs add $CSCOPE_DB
+    endif
+    set csverb
+endif
+
+set tags+=/home/ubuntu/tags
+set tags+=/home/ubuntu/self-motiveted/ics2021/tags
+" OmniCppComplete
+let OmniCpp_NamespaceSearch = 1
+let OmniCpp_GlobalScopeSearch = 1
+let OmniCpp_ShowAccess = 1
+let OmniCpp_ShowPrototypeInAbbr = 1 " 显示函数参数列表
+let OmniCpp_MayCompleteDot = 1   " 输入 .  后自动补全
+let OmniCpp_MayCompleteArrow = 1 " 输入 -> 后自动补全
+let OmniCpp_MayCompleteScope = 1 " 输入 :: 后自动补全
+let OmniCpp_DefaultNamespaces = ["std", "_GLIBCXX_STD"]
+
+"Uncomment to override defaults:
+let g:instant_markdown_slow = 1
+let g:instant_markdown_autostart = 0
+let g:instant_markdown_open_to_the_world = 1
+let g:instant_markdown_allow_unsafe_content = 1
+let g:instant_markdown_allow_external_content = 0
+let g:instant_markdown_mathjax = 1
+let g:instant_markdown_mermaid = 1
+let g:instant_markdown_logfile = '/tmp/instant_markdown.log'
+let g:instant_markdown_autoscroll = 0
+let g:instant_markdown_port = 8888
+let g:instant_markdown_python = 1
+autocmd BufNewFile,BufReadPost *.md set filetype=markdown
+"for normal n for insert i
+nmap <silent> <F11> <Plug>MarkdownPreview       
+imap <silent> <F11> <Plug>MarkdownPreview       
+nmap <silent> <F12> <Plug>StopMarkdownPreview  
+imap <silent> <F12> <Plug>StopMarkdownPreview 
+
+nnoremap <Leader>l <C-W><C-W>
+" 跳转至右方的窗口
+nnoremap <Leader>h <C-W>h
+" 跳转至左方的窗口
+nnoremap <Leader>k <C-W>k
+" 跳转至上方的子窗口
+nnoremap <Leader>j <C-W>j
+" 跳转至下方的子窗口
+
+" change window size
+nnoremap <Left> :vertical resize +5 <CR>
+nnoremap <Right> :vertical resize -5 <CR>
+nnoremap <Up> :res +5 <CR>
+nnoremap <Down> :res -5 <CR>
+
+let g:ycm_global_ycm_extra_conf='~/.ycm_extra_conf.py'
+let g:ycm_confirm_extra_conf = 0
+
+"edit in middle
+se so=999

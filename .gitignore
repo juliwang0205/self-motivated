@@ -1,6 +1,7 @@
 *.*
 *
 !*/
+!/tools/*
 !README.md
 !Clockwise-Spira.md
 !.gitignore
