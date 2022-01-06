@@ -1,0 +1,16 @@
+*.*
+*
+!*/
+!README.md
+!Clockwise-Spira.md
+!.gitignore
+!/ics2021/nemu/*
+!/ics2021/nexus-am/*
+!/ics2021/nanos-lite/*
+!/ics2021/navy-apps/*
+!/ics2021/Makefile
+!/ics2021/README.md
+!/ics2021/.gitignore
+!/ics2021/init.sh
+/ics2021/fceux-am
+/ics2021/am-kernels
