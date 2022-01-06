@@ -1,0 +1,14 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[remote "origin"]
+  # change this line as follow if cannot push to master
+	url = git@github.com:juliwang0205/self-motivated.git
+	fetch = +refs/heads/*:refs/remotes/origin/*
+[user]
+	name = Juli Wang
+[branch "master"]
+	remote = origin
+	merge = refs/heads/master
