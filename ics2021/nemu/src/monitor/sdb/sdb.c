@@ -43,8 +43,9 @@ static int cmd_si(char *args);
 
 static int cmd_info(char *args);
 
-static int cmd_mem(char *args);
+static int cmd_x(char *args);
 
+static int cmd_p(char *args);
 static struct {
   const char *name;
   const char *description;
@@ -53,7 +54,8 @@ static struct {
   { "help", "Display informations about all supported commands", cmd_help },
   { "si", "run N steps, default is 1 step", cmd_si },
   { "info", "show regs status", cmd_info },
-  { "x", "show mem data", cmd_mem },
+  { "x", "show mem data", cmd_x },
+  { "p", "p EXPR, calculate the value of EXPR",cmd_p},
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
 
@@ -129,7 +131,7 @@ static int cmd_info(char *args)
 }
 
 
-static int cmd_mem(char *args)
+static int cmd_x(char *args)
 {
   uint16_t i = 0;
   uint16_t j = 0;
@@ -150,6 +152,17 @@ static int cmd_mem(char *args)
   }
 
   return 1;
+}
+
+static int cmd_p(char *args)
+{
+	bool success=false;
+	uint32_t ans=expr(args,&success);
+	if(success)
+		printf("%d\n",ans);
+	else
+		printf("function fault!");
+	return 0;
 }
 
 void sdb_set_batch_mode() {
