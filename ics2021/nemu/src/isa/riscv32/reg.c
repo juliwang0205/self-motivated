@@ -9,17 +9,19 @@ const char *regs[] = {
 };
 
 void isa_reg_display() {
-  uint16_t i = 0;
-  uint16_t j = 0;
-  uint16_t tmp = 0;
-  for(i = 0; i < 4; i++) {
-    for(j = 0; j < 8; j++) {
-      tmp = i*j + j;
-      printf("reg %s data 0x%08x\n", regs[tmp], cpu.gpr[tmp]._32);
-    }
+  uint16_t idx = 0;
+  for(idx= 0; idx < 32; idx++) {
+    printf("reg %s data 0x%08x\n", regs[idx], gpr(idx));
   }
 }
 
 word_t isa_reg_str2val(const char *s, bool *success) {
+  int idx;                    
+  for (idx = 0; idx < 32; idx++) {
+    if(!strcmp(regs[idx],s)){
+      *success = true; 
+      return gpr(idx);
+    }
+  }
   return 0;
 }

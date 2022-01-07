@@ -5,7 +5,6 @@
 #include <sys/types.h>
 #include <memory/paddr.h>
 #include <regex.h>
-extern const char* regs[];
 
 enum {
   //NOTYPE = 256, EQUAL,
@@ -221,22 +220,12 @@ uint32_t trans2num16(char *s)
 	return ans;
 }
 
-uint32_t read_reg(char *s)
-{
-	int i;
-		for (i = 0; i < 32; ++i)
-			if(!strcmp(regs[i],s))
-				return  cpu.gpr[i]._32;
-		return 0;
-
-}
-
 /*不仅查明表达式中括号是否匹配，还要看整个表达式是不是被一个括号括住*/
 bool check_parentheses(unsigned p,unsigned q)
 {
 	if(tokens[p].type!='('||tokens[q].type!=')')
 		return false;
-	unsigned counter=0;
+	  unsigned counter=0;
     unsigned i = p+1;
     for (; i < q;++i)
     {
@@ -266,9 +255,9 @@ bool check_only_parentheses(unsigned p,unsigned q)
             ++counter;
         else if(tokens[i].type==')')
         {
-	    if (!counter)
-		return false;
-	    --counter;
+	          if (!counter)
+		          return false;
+	          --counter;
         }
     }
     if(!counter)
@@ -338,6 +327,7 @@ unsigned dominant_operator(int p, int q)
 
 uint32_t eval(int p,int q)
 {
+  bool success = false;;
     if(p > q)
         assert(0);
     else if(p == q)
@@ -347,7 +337,7 @@ uint32_t eval(int p,int q)
 	else if(tokens[p].type==HEXNUM)
 		return trans2num16(tokens[p].str);
 	else if(tokens[p].type==REGNAME)
-		return read_reg(tokens[p].str);
+		return isa_reg_str2val(tokens[p].str, &success);
 	else
 		assert(0);
 	/* Single token.
@@ -356,39 +346,39 @@ uint32_t eval(int p,int q)
          */
 	}
 	else if(check_parentheses(p, q) == true)
-        return eval(p + 1, q - 1);
-        else
+      return eval(p + 1, q - 1);
+  else
 	{
-	assert(check_only_parentheses(p,q)==true);
-        unsigned op = dominant_operator(p,q);
-	if(tokens[op].type==NEG || tokens[op].type==DEREF || tokens[op].type=='!' )
-	  {
-	    uint32_t val=eval(op+1,q);
-	    switch(tokens[op].type)
+	    assert(check_only_parentheses(p,q)==true);
+      unsigned op = dominant_operator(p,q);
+	    if(tokens[op].type==NEG || tokens[op].type==DEREF || tokens[op].type=='!' )
 	    {
-	    case NEG:return -val;
-	    case DEREF: return paddr_read(val, 4);
-	    case '!': return !val;
-            default: assert(0);
+	        uint32_t val=eval(op+1,q);
+	        switch(tokens[op].type)
+	        {
+	        case NEG:return -val;
+	        case DEREF: return paddr_read(val, 4);
+	        case '!': return !val;
+          default: assert(0);
     	    }
-	  }
-	else
-	  {
-            uint32_t val1 = eval(p, op - 1);
-            uint32_t val2 = eval(op + 1, q);
-            switch(tokens[op].type)
+	    }
+	    else
 	    {
-            case '+': return val1 + val2;
-            case '-': return val1 - val2;
-            case '*': return val1 * val2;
-            case '/': return val1 / val2;
-	    case EQUAL:return val1 == val2;
-	    case NOTEQUAL:return val1 != val2;
-	    case AND: return val1 && val2;
-	    case OR: return val1 || val2;
-            default: assert(0);
+          uint32_t val1 = eval(p, op - 1);
+          uint32_t val2 = eval(op + 1, q);
+          switch(tokens[op].type)
+	        {
+          case '+': return val1 + val2;
+          case '-': return val1 - val2;
+          case '*': return val1 * val2;
+          case '/': return val1 / val2;
+	        case EQUAL:return val1 == val2;
+	        case NOTEQUAL:return val1 != val2;
+	        case AND: return val1 && val2;
+	        case OR: return val1 || val2;
+          default: assert(0);
     	    }
-	  }
+	    }
 	}
 	return 0;
 }
