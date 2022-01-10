@@ -46,6 +46,11 @@ static int cmd_info(char *args);
 static int cmd_x(char *args);
 
 static int cmd_p(char *args);
+
+static int cmd_w(char *args);
+
+static int cmd_d(char *args);
+
 static struct {
   const char *name;
   const char *description;
@@ -57,6 +62,8 @@ static struct {
   { "x", "show mem data", cmd_x },
   { "p", "p EXPR, calculate the value of EXPR",cmd_p},
   { "c", "Continue the execution of the program", cmd_c },
+  { "w", "w EXPR, create watchpoint, every time the EXPR is changed, program is paused",cmd_w},
+	{ "d", "d N, delete the watchpoint whose number is N",cmd_d},
   { "q", "Exit NEMU", cmd_q },
 
   /* TODO: Add more commands */
@@ -162,6 +169,26 @@ static int cmd_p(char *args)
 		printf("%d\n",ans);
 	else
 		printf("function fault!");
+	return 0;
+}
+
+static int cmd_w(char *args)
+{
+	WP *n_wp=new_wp(args);
+	printf("watchpoint %d:%s is set successfully.\n",n_wp->NO,n_wp->exp);
+	return 0;
+}
+
+static int cmd_d(char *args)
+{
+	char *arg = strtok(NULL, " ");
+	int num = 0;
+	sscanf(arg, "%d", &num);
+	bool ans=delete_wp (num);
+	if(ans)
+		printf("delete watchpoint %d successfully!\n", num);
+	else
+		printf("There is no watchpoint whose NO. is %d.\n",num);
 	return 0;
 }
 
