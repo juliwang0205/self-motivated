@@ -25,7 +25,10 @@ filetype off
 set rtp+=~/.vim/bundle/Vundle.vim
 
 call vundle#begin()
-
+"In VIM, how to highlight the user defined data type?
+"https://stackoverflow.com/questions/54685249/in-vim-how-to-highlight-the-user-defined-data-type
+"https://vimawesome.com/plugin/c-syntax-vim
+Plugin 'nlknguyen/c-syntax.vim'
 Plugin 'vim-scripts/taglist.vim'
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'altercation/vim-colors-solarized'
@@ -158,3 +161,4 @@ function! UpdateCtags()
 endfunction
 nmap <F6> :call UpdateCtags()<CR>
 "nmap <F5> :call UpdateCtags()<CR>
+
