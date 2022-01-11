@@ -84,11 +84,15 @@ if has("cscope")
     set csverb
 endif
 
-set tags+=/home/ubuntu/tags
+set tags+=/home/ubuntu/NEMU/tags
 set tags+=/home/ubuntu/self-motiveted/ics2021/tags
-" OmniCppComplete
-let OmniCpp_NamespaceSearch = 1
+" more details about OmniCppComplete 
+" https://www.cxyzjd.com/article/yufengicd/8451963 
+let OmniCpp_NamespaceSearch = 2
 let OmniCpp_GlobalScopeSearch = 1
+let OmniCpp_ShowAccess = 1
+let OmniCpp_DisplayMode = 1
+let OmniCpp_ShowScopeInAbbr = 1
 let OmniCpp_ShowAccess = 1
 let OmniCpp_ShowPrototypeInAbbr = 1 " 显示函数参数列表
 let OmniCpp_MayCompleteDot = 1   " 输入 .  后自动补全
@@ -135,3 +139,22 @@ let g:ycm_confirm_extra_conf = 0
 
 "edit in middle
 se so=999
+
+"update tags auto / F56to update tags
+function! UpdateCtags()
+    let curdir=getcwd()
+    while !filereadable("./tags")
+        cd ..
+        if getcwd() == "/"
+            break
+        endif
+    endwhile
+    if filewritable("./tags")
+        !ctags -R  --langmap=c:+.h --languages=c,c++ --links=yes --c-kinds=+p --c++-kinds=+p --fields=+iaS --extras=+q
+        TlistUpdate
+        !cscope -Rbkq
+    endif
+    execute ":cd " . curdir
+endfunction
+nmap <F6> :call UpdateCtags()<CR>
+"nmap <F5> :call UpdateCtags()<CR>
