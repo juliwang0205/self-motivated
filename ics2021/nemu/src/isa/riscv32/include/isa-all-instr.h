@@ -2,6 +2,6 @@
 #include "../local-include/rtl.h"
 
 #define INSTR_LIST(f) f(lui) f(lw) f(sw) f(inv) f(nemu_trap) \
-  f(addi) f(auipc) f(jal) f(jalr)
-
+  f(addi) f(auipc) f(jal) f(jalr) f(add) f(sub) f(sltiu) f(bne) \
+  f(beq)
 def_all_EXEC_ID();
