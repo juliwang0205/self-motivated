@@ -64,6 +64,16 @@ def_EHelper(sub) {
   rtl_sub(s, ddest, id_src1->preg, id_src2->preg);
 }
 
+def_EHelper(mul) {
+  rtl_mulu_lo(s, ddest, id_src1->preg, id_src2->preg);
+}
+
+def_EHelper(div) {
+  rtl_divs_q(s, ddest, id_src1->preg, id_src2->preg);
+}
+
+
+
 def_EHelper(sll) {
   rtl_sll(s, ddest, id_src1->preg, id_src2->preg);
 }
