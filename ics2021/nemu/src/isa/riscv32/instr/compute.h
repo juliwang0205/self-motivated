@@ -63,3 +63,15 @@ def_EHelper(beq) {
   //Log("\nbeq: ");
   //isa_reg_display();
 }
+
+def_EHelper(sltu) {
+  rtl_setrelop(s, RELOP_LTU, ddest, id_src1->preg, id_src2->preg); 
+}
+
+def_EHelper(xor) {
+  rtl_xor(s, ddest, id_src1->preg, id_src2->preg);
+}
+
+def_EHelper(or) {
+  rtl_or(s, ddest, id_src1->preg, id_src2->preg);
+}
