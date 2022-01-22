@@ -68,8 +68,32 @@ def_EHelper(mul) {
   rtl_mulu_lo(s, ddest, id_src1->preg, id_src2->preg);
 }
 
+def_EHelper(mulh) {
+  rtl_mulu_hi(s, ddest, id_src1->preg, id_src2->preg);
+}
+
+def_EHelper(mulhsu) {
+  rtl_muls_hi(s, ddest, id_src1->preg, id_src2->preg);
+}
+
+def_EHelper(mulhu) {
+  rtl_mulu_lo(s, ddest, id_src1->preg, id_src2->preg);
+}
+
 def_EHelper(div) {
   rtl_divs_q(s, ddest, id_src1->preg, id_src2->preg);
+}
+
+def_EHelper(divu) {
+  rtl_divu_q(s, ddest, id_src1->preg, id_src2->preg);
+}
+
+def_EHelper(rem) {
+  rtl_divs_r(s, ddest, id_src1->preg, id_src2->preg);
+}
+
+def_EHelper(remu) {
+  rtl_divu_r(s, ddest, id_src1->preg, id_src2->preg);
 }
 
 
