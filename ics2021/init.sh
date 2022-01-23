@@ -51,10 +51,10 @@ case $1 in
     ;;
   abstract-machine)
     init abstract-machine AM_HOME
-    init_no_git fceux-am
+    init fceux-am FA_HOME
     ;;
   am-kernels)
-    init_no_git am-kernels
+    init am-kernels AK_HOME
     ;;
   nanos-lite)
     init nanos-lite
