@@ -37,8 +37,64 @@ char* get_ch(char *dest, int num, int n) {
 	return dest;
 }
 
-int printf(const char *format, ...) {
-  panic("Not implemented"); 
+int printf(const char *fmt, ...) {
+	va_list ap;
+  	va_start(ap,fmt);
+  	int sum=0;
+  	int i=0;
+  	int len=strlen(fmt);
+	while(i<len) {
+    if(fmt[i]=='%') {
+      int num=0;
+      char ls[50]="";
+      switch(fmt[i+1]) {
+        case 'd': {
+	  		num=va_arg(ap,int);
+	  		get_ch(ls, num, 10);
+	  		for(int j = 0; j < strlen(ls); j++) {putch(ls[j]);}
+	  		sum += strlen(ls);	
+			i+=2;
+        } break;
+		case 's': {
+	  		strcpy(ls,va_arg(ap, char*));
+	  		for(int j = 0; j < strlen(ls); j++) putch(ls[j]);
+	  		sum += strlen(ls);
+			i+=2;
+		} break;
+		case '0': {
+			num=va_arg(ap,int);
+	  		get_ch(ls, num, 10);
+			int width = fmt[i+2]-'0';
+			for(int i = strlen(ls); i < width; i++) {
+				sum++;
+				putch('0');
+			}
+	  		for(int j = 0; j < strlen(ls); j++) {putch(ls[j]);}
+	  		sum += strlen(ls);	
+			i+=4;
+		} break;
+		case 'p': {
+				num=va_arg(ap, int);
+				get_ch(ls, num, 16);
+				putch('0'); putch('x');
+				sum += 2;
+				for(int j = 0; j < strlen(ls); j++) putch(ls[j]);
+				sum+=strlen(ls);
+				i += 2;
+		} break;
+		default: {
+			i = len;
+		}
+	  } 
+	}
+    else {
+      	putch(fmt[i]);
+		sum++;  	
+      	i++;
+  	}
+  }
+  va_end(ap);
+  return sum; 
 }
 
 int vsprintf(char *out, const char *fmt, va_list ap) {
