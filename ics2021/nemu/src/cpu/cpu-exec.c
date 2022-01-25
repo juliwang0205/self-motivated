@@ -21,14 +21,16 @@ rtlreg_t tmp_reg[4];
 void device_update();
 void fetch_decode(Decode *s, vaddr_t pc);
 
-static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
-#ifdef CONFIG_ITRACE_COND
-  if (ITRACE_COND) log_write("%s\n", _this->logbuf);
-#endif
+static void difftest(Decode *_this, vaddr_t dnpc) {
   if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(_this->logbuf)); }
   IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
 }
 
+static void itrace(char *buffer) {
+#ifdef CONFIG_ITRACE_COND
+  if (ITRACE_COND) log_write("%s\n", buffer);
+#endif
+}
 #include <isa-exec.h>
 
 #define FILL_EXEC_TABLE(name) [concat(EXEC_ID_, name)] = concat(exec_, name),
@@ -97,14 +99,25 @@ void cpu_exec(uint64_t n) {
   uint64_t timer_start = get_time();
 
   Decode s;
+  uint8_t i = 0;
+  /*Modify itrace every time print ten instructions*/
+  char ringBuffer[10][128];
   for (;n > 0; n --) {
     fetch_decode_exec_updatepc(&s);
     g_nr_guest_instr ++;
-    trace_and_difftest(&s, cpu.pc);
+    i = n % 10;
+    strcpy(&ringBuffer[i][0], s.logbuf);
+    if(i == 10) i = 0;
+    difftest(&s, cpu.pc);
     if (nemu_state.state != NEMU_RUNNING) break;
     IFDEF(CONFIG_DEVICE, device_update());
   }
-
+  for(i = 0; i< 10; i++) {
+#ifdef CONFIG_ITRACE_COND
+    itrace(&ringBuffer[i][0]);
+#endif
+  }
+  
   uint64_t timer_end = get_time();
   g_timer += timer_end - timer_start;
 
