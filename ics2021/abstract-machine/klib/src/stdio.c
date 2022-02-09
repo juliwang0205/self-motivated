@@ -114,29 +114,29 @@ int sprintf(char *out, const char *fmt, ...) {
       char ls[50]="";
       switch(fmt[i+1]) {
         case 'd': {
-	  		num=va_arg(ap,int);
-	  		get_ch(ls, num, 10);
-	  		strcat(out,ls);
-	  		sum+=strlen(ls);	
+	  		  num=va_arg(ap,int);
+	  		  get_ch(ls, num, 10);
+	  		  strcat(out,ls);
+	  		  sum+=strlen(ls);	
         } break;
-		case 's': {
-	  		strcpy(ls,va_arg(ap, char*));
-	  		strcat(out,ls);
-	  		sum += strlen(ls);
-		} break;
-		default: {
-			printf("sprintf fault \n");
-		}
-	  } 
+		    case 's': {
+	  		  strcpy(ls,va_arg(ap, char*));
+	  		  strcat(out,ls);
+	  		  sum += strlen(ls);
+		    } break;
+		    default: {
+			    printf("sprintf fault \n");
+		    }
+	    } 
       i+=2;
-	}
+	  }
     else {
-      	sum++;
-      	char s[2];
-      	s[0]=fmt[i];
-      	s[1]='\0';
-      	strcat(out,s);
-      	i++;
+      sum++;
+      char s[2];
+      s[0]=fmt[i];
+      s[1]='\0';
+      strcat(out,s);
+      i++;
   	}
  }
   va_end(ap);

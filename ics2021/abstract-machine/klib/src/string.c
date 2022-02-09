@@ -61,6 +61,7 @@ int strncmp(const char *s1, const char *s2, size_t n) {
   }
   return(((int8_t*)s1)[i] -((int8_t*)s2)[i]);
 }
+
 void *memset(void *s, int c, size_t n) {
   assert(s != NULL);
   assert(n >= 0);
