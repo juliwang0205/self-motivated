@@ -21,9 +21,10 @@ rtlreg_t tmp_reg[4];
 void device_update();
 void fetch_decode(Decode *s, vaddr_t pc);
 
-static void difftest(Decode *_this, vaddr_t dnpc) {
+static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
   if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(_this->logbuf)); }
   IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
+  IFDEF(CONFIG_WATCHPOINT, check_watchpoint());
 }
 
 static void itrace(char *buffer) {
@@ -108,7 +109,7 @@ void cpu_exec(uint64_t n) {
     i = n % 10;
     strcpy(&ringBuffer[i][0], s.logbuf);
     if(i == 10) i = 0;
-    difftest(&s, cpu.pc);
+    trace_and_difftest(&s, cpu.pc);
     if (nemu_state.state != NEMU_RUNNING) break;
     IFDEF(CONFIG_DEVICE, device_update());
   }

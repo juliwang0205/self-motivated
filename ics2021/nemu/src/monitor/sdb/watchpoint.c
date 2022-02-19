@@ -56,11 +56,32 @@ void free_wp(WP *wp)
 
 }
 
+void check_watchpoint()
+{
+	if(head==NULL)
+		printf("NO WATCHPOINT!\n");
+  bool success;
+  uint32_t n_value;
+  WP *p = head;
+	while(p)
+	{
+    n_value = expr(p->exp, &success);
+    assert(success);
+		printf("watch point %d: %s\n", p->NO, p->exp);
+		printf("\t The value now is %d\n", p->value);
+		p = p->next;
+    if(n_value != p->value) {
+      nemu_state.state=NEMU_STOP;
+      Log("Expression has changed at watchpoint %d %s\n",p->NO, p->exp);
+    }
+	}
+}
+
 void print_wp()
 {
 	if(head==NULL)
 		printf("NO WATCHPOINT!\n");
-	WP *p = head;
+  WP *p = head;
 	while(p)
 	{
 		printf("watch point %d: %s\n", p->NO, p->exp);
