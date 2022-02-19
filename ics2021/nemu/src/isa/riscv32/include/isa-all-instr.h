@@ -8,6 +8,7 @@
   f(sb) f(sh) f(sw) f(sd) \
   f(lb) f(lbu) f(lh) f(lhu) f(lw)f(lwu) f(ld) \
   f(add) f(sub) f(div) f(divu) f(mul) f(mulh) f(mulhsu) f(mulhu) f(rem) f(remu)\
-  f(sll) f(slt) f(sltu)f(xor) f(srl) f(sra) f(or) f(and) 
+  f(sll) f(slt) f(sltu)f(xor) f(srl) f(sra) f(or) f(and) \
+  f(csrrw) f(ecall) f(csrrs) f(mret) //f(sret) f(sfence_vma)
 
 def_all_EXEC_ID();
