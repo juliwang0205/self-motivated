@@ -209,4 +209,13 @@ config RT_CHECK
 config WATCHPOINT
   bool "Enable watchpoint checking"
   default n
+config MTRACE
+  bool "Enable memory checking"
+  default n
+config ETRACE
+  bool "Enable raise exception"
+  default n
+config DTRACE
+  bool "Enable devices checking"
+  default n
 endmenu

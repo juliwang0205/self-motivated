@@ -42,6 +42,9 @@ word_t paddr_read(paddr_t addr, int len) {
   MUXDEF(CONFIG_DEVICE, return mmio_read(addr, len),
     panic("address = " FMT_PADDR " is out of bound of pmem [" FMT_PADDR ", " FMT_PADDR ") at pc = " FMT_WORD,
       addr, CONFIG_MBASE, CONFIG_MBASE + CONFIG_MSIZE, cpu.pc));
+#ifdef CONFIG_MTRACE
+  printf("read pmemk 0x%x\n", addr);
+#endif
 }
 
 void paddr_write(paddr_t addr, int len, word_t data) {
@@ -49,4 +52,7 @@ void paddr_write(paddr_t addr, int len, word_t data) {
   MUXDEF(CONFIG_DEVICE, mmio_write(addr, len, data),
     panic("address = " FMT_PADDR " is out of bound of pmem [" FMT_PADDR ", " FMT_PADDR ") at pc = " FMT_WORD,
       addr, CONFIG_MBASE, CONFIG_MBASE + CONFIG_MSIZE, cpu.pc));
+#ifdef CONFIG_MTRACE
+  printf("write pmemk 0x%x\n", addr);
+#endif
 }
