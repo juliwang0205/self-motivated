@@ -16,6 +16,8 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   ramdisk_read(&ehdr, 0, sizeof(Elf_Ehdr));
   //check elf file E='45' L='4c' F='46'
   assert(*(uint32_t *)ehdr.e_ident == 0x464c457f);
+  //check CPU type EM_RISCV stand for riscv see /usr/include/elf.h to get the right type
+  assert(ehdr.e_machine == EM_RISCV);
   Elf_Phdr phdr[ehdr.e_phnum];
   ramdisk_read(phdr, ehdr.e_ehsize, sizeof(Elf_Phdr) * ehdr.e_phnum);
   for(i = 0; i < ehdr.e_phnum; i++) {
@@ -29,7 +31,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 
 void naive_uload(PCB *pcb, const char *filename) {
   uintptr_t entry = loader(pcb, filename);
-  Log("Jump to entry = %p", entry);
+  Log("Jump to entry = 0x%x", entry);
   ((void(*)())entry) ();
 }
 

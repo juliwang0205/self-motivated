@@ -40,6 +40,7 @@ Context *kcontext(Area kstack, void (*entry)(void *), void *arg) {
 }
 
 void yield() {
+  // change -1 to 0 to call sys_exit
   asm volatile("li a7, 0; ecall");
 }
 

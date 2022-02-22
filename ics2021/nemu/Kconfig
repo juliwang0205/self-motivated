@@ -218,4 +218,7 @@ config ETRACE
 config DTRACE
   bool "Enable devices checking"
   default n
+config STRACE
+  bool "Enable sys call checking"
+  default n
 endmenu
