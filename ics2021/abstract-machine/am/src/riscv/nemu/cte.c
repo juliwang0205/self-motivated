@@ -44,6 +44,19 @@ void yield() {
   asm volatile("li a7, 0; ecall");
 }
 
+int write(int fd, void *buf, size_t count)
+{
+  int ret = 0;
+  char *str = (char *)buf;
+  if(fd == 1 || fd == 2) {
+    for(size_t i = 0; i < count; i ++) {
+      putch(str[i]);
+      ret++;
+    }
+  }
+  return ret;
+}
+
 bool ienabled() {
   return false;
 }
