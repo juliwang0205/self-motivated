@@ -23,8 +23,12 @@ void do_syscall(Context *c) {
 
     case SYS_write:
       //Log("SYS_write");
-      //Log("a[1] = %d a[3] = %d", a[1], a[3]);
       c->GPRx = write(a[1], (void* )a[2], a[3]);
+      break;
+    
+    case SYS_brk:
+      //Log("SYS_brk");
+      c->GPRx = 0;
       break;
 
     default: panic("Do syscall Unhandled syscall ID = %d", a[0]); break;
