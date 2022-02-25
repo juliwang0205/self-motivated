@@ -14,7 +14,7 @@ Context* __am_irq_handle(Context *c) {
                ev.event = EVENT_SYSCALL; break;
       default: ev.event = EVENT_ERROR;   break;
     }
-    c = user_handler(ev, c);
+    c = user_handler(ev, c); // --> do_event
     assert(c != NULL);
   }
 #ifdef CONFIG_ETRACE
@@ -30,7 +30,7 @@ bool cte_init(Context*(*handler)(Event, Context*)) {
   asm volatile("csrw mtvec, %0" : : "r"(__am_asm_trap));
 
   // register event handler
-  user_handler = handler;
+  user_handler = handler; // -->do_event
 
   return true;
 }

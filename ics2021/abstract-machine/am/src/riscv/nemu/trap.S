@@ -30,35 +30,35 @@ f(30) f(31)
 .align 3
 .globl __am_asm_trap
 __am_asm_trap:
-  addi sp, sp, -CONTEXT_SIZE
+  addi sp, sp, -CONTEXT_SIZE # sp stack pointer move to sp = sp-CONTEXT_SIZE to store register data
 
-  MAP(REGS, PUSH)
+  MAP(REGS, PUSH)            # push all the register's data into stack
 
-  csrr t0, mcause
-  csrr t1, mstatus
-  csrr t2, mepc
+  csrr t0, mcause            # move mcause to t0
+  csrr t1, mstatus           # move mstatus to t1
+  csrr t2, mepc              # move mepc to t2
 
-  STORE t0, OFFSET_CAUSE(sp)
-  STORE t1, OFFSET_STATUS(sp)
-  STORE t2, OFFSET_EPC(sp)
+  STORE t0, OFFSET_CAUSE(sp) # push t0 to stack
+  STORE t1, OFFSET_STATUS(sp)# push t1 to stack
+  STORE t2, OFFSET_EPC(sp)   # push t2 to stack
 
   # set mstatus.MPRV to pass difftest
   li a0, (1 << 17)
   or t1, t1, a0
   csrw mstatus, t1
 
-  mv a0, sp
-  jal __am_irq_handle
+  mv a0, sp                  # a0 store sp
+  jal __am_irq_handle        # jump to __am_irq_handle
 
-  LOAD t1, OFFSET_STATUS(sp)
-  LOAD t2, OFFSET_EPC(sp)
-  csrw mstatus, t1
+  LOAD t1, OFFSET_STATUS(sp) # pop mstatus to t1
+  LOAD t2, OFFSET_EPC(sp)    # pop mepc to t2
+  csrw mstatus, t1           # pop mstatus to t1
   
-  addi t2, t2, 4
-  csrw mepc, t2
-  addi t2, t2, -4
+  addi t2, t2, 4             # mepc add 4 to mepc(pc+4) (after ecall instr pc+4)
+  csrw mepc, t2              # pop mepc to t2
+  addi t2, t2, -4            # restore pc
 
-  MAP(REGS, POP)
+  MAP(REGS, POP)             # pop all the register
 
-  addi sp, sp, CONTEXT_SIZE
-  mret
+  addi sp, sp, CONTEXT_SIZE  # restore sp pointer
+  mret                       # restore from expection
