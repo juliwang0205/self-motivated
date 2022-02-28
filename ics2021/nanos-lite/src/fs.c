@@ -1,3 +1,4 @@
+#include <device.h>
 #include <fs.h>
 
 typedef size_t (*ReadFn) (void *buf, size_t offset, size_t len);
@@ -14,15 +15,6 @@ typedef struct {
 
 enum {FD_STDIN, FD_STDOUT, FD_STDERR, FD_FB};
 
-size_t pass(const void *buf, size_t offset, size_t len) {
-  char * str = (char *)buf;
-  size_t i = 0;
-  for(i = 0; i < len; i ++){
-    putch(str[i]);
-  }
-  return 0 ;
-}
-
 size_t invalid_read(void *buf, size_t offset, size_t len) {
   panic("should not reach here");
   return 0;
@@ -36,8 +28,8 @@ size_t invalid_write(const void *buf, size_t offset, size_t len) {
 /* This is the information about all files in disk. */
 static Finfo file_table[] __attribute__((used)) = {
   [FD_STDIN]  = {"stdin", 0, 0, invalid_read, invalid_write},
-  [FD_STDOUT] = {"stdout", 0, 0, invalid_read, pass},
-  [FD_STDERR] = {"stderr", 0, 0, invalid_read, pass},
+  [FD_STDOUT] = {"stdout", 0, 0, invalid_read, serial_write},
+  [FD_STDERR] = {"stderr", 0, 0, invalid_read, serial_write},
 #include "files.h"
 };
 
@@ -50,10 +42,11 @@ size_t lenchoose(size_t a, size_t b) {
 }
 
 int fs_open(const char *pathname, int flags, int mode) {
-  int fileNum = sizeof(file_table) / sizeof(Finfo);
-  int i = 0;
+  size_t fileNum = sizeof(file_table) / sizeof(Finfo);
+  size_t i = 0;
   for(i = 0; i < fileNum; i++) {
     if(strcmp(file_table[i].name, pathname) == 0) {
+      Log("fs_open file name %s",file_table[i].name);
       file_table[i].current = 0;
       return i;
     }
@@ -64,8 +57,8 @@ int fs_open(const char *pathname, int flags, int mode) {
 }
 
 size_t fs_read(int fd, void *buf, size_t len) {
-  int ret  = -1;
-  int readlen = lenchoose(len, file_table[fd].size - file_table[fd].current);
+  size_t ret  = -1;
+  size_t readlen = lenchoose(len, file_table[fd].size - file_table[fd].current);
   assert(readlen + file_table[fd].current <= file_table[fd].size);
   size_t offset = file_table[fd].disk_offset + file_table[fd].current;
   if(file_table[fd].read == NULL) {
@@ -79,8 +72,8 @@ size_t fs_read(int fd, void *buf, size_t len) {
 }
 
 size_t fs_write(int fd, const void *buf, size_t len) {
-  int ret  = -1;
-  int writelen = lenchoose(len, file_table[fd].size - file_table[fd].current);
+  size_t ret  = -1;
+  size_t writelen = lenchoose(len, file_table[fd].size - file_table[fd].current);
   assert(writelen + file_table[fd].current <= file_table[fd].size);
   size_t offset = file_table[fd].disk_offset + file_table[fd].current;
   if(file_table[fd].write == NULL) {
