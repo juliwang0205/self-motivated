@@ -1,4 +1,4 @@
-//#include <common.h>
+#include <common.h>
 #include "syscall.h"
 static Context* do_event(Event e, Context* c) {
   //Log("do_event");
