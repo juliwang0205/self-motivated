@@ -3,8 +3,9 @@
 #include <NDL.h>
 int main() {
 	//struct timeval tv;
-	int temp = -1;                                     
-	int t = -1;                                         
+  int temp = -1;
+  int t = -1;
+  NDL_Init(0);
 	while(1){
     /*
 	  gettimeofday(&tv, NULL);                        
