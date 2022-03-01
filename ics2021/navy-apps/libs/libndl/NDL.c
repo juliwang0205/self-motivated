@@ -71,6 +71,16 @@ void NDL_OpenCanvas(int *w, int *h) {
 }
 
 void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
+  if(h == 0||h > canvas_h)h = canvas_h;
+  if(w == 0||w > canvas_w)w = canvas_w;
+  for(int i = 0;i < h;i ++)
+    for(int j = 0;j < w;j ++)
+      canvas[(y+i)*canvas_w+(x+j)] = pixels[i*w+j];//canvas x,y image
+  FILE* fp = fopen("/dev/fb","w");
+  for(int i = 0;i < canvas_h;i ++){
+    fseek(fp, 4*((i+offset_h)*screen_w+offset_w), SEEK_SET);
+    fwrite((void*)(canvas+i*canvas_w), 1, 4*canvas_w, fp);//put to screen base on line
+  }
 }
 
 void NDL_OpenAudio(int freq, int channels, int samples) {

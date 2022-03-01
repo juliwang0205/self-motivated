@@ -31,11 +31,15 @@ static Finfo file_table[] __attribute__((used)) = {
   [FD_STDERR] = {"stderr", 0, 0, invalid_read, serial_write},
   [FD_EVENT] = {"/dev/events", 0, 0, events_read, invalid_write},
   [FD_DISPINFO] = {"/proc/dispinfo", 64, 0, dispinfo_read, invalid_write},
+  [FD_FB] = {"/dev/fb", 0, 0, invalid_read, fb_write},
 #include "files.h"
 };
 
 void init_fs() {
   // TODO: initialize the size of /dev/fb
+  uint32_t w = io_read(AM_GPU_CONFIG).width;
+  uint32_t h = io_read(AM_GPU_CONFIG).height;
+  file_table[FD_FB].size = w*h*4;
 }
 
 size_t lenchoose(size_t a, size_t b) {
