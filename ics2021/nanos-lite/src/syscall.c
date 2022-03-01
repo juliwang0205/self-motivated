@@ -1,5 +1,6 @@
 #include <common.h>
 #include "syscall.h"
+#include <device.h>
 #include <fs.h>
 
 void do_syscall(Context *c) {
@@ -47,6 +48,10 @@ void do_syscall(Context *c) {
     case SYS_brk:
       Log("SYS_brk");
       c->GPRx = 0;
+      break;
+    case SYS_gettimeofday:
+      //Log("SYS_gettimeofday");
+      c->GPRx = sys_gettimeofday((struct timeval*)a[1], (struct timezone*)a[2]);
       break;
 
     default: panic("Do syscall Unhandled syscall ID = %d", a[0]); break;
