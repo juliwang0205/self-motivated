@@ -44,6 +44,8 @@ void yield() {
   asm volatile("li a7, 0; ecall");
 }
 
+//PA3 this write for standard in/out
+/*
 int write(int fd, void *buf, size_t count)
 {
   int ret = 0;
@@ -56,6 +58,7 @@ int write(int fd, void *buf, size_t count)
   }
   return ret;
 }
+*/
 
 bool ienabled() {
   return false;

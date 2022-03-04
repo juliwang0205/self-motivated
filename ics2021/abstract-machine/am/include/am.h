@@ -57,7 +57,8 @@ void     ioe_write   (int reg, void *buf);
 // ---------- CTE: Interrupt Handling and Context Switching ----------
 bool     cte_init    (Context *(*handler)(Event ev, Context *ctx));
 void     yield       (void);
-int      write       (int fd, void *buf, size_t count);
+//PA3 this write for standard in/out
+//int      write       (int fd, void *buf, size_t count);
 bool     ienabled    (void);
 void     iset        (bool enable);
 Context *kcontext    (Area kstack, void (*entry)(void *), void *arg);

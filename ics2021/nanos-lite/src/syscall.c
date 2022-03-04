@@ -25,7 +25,7 @@ void do_syscall(Context *c) {
       break;
     case SYS_write:
       Log("SYS_write");
-      //for standard in/out (call in cte.c)
+      //PA3 for standard in/out (call in cte.c define in am.h)
       //c->GPRx = write(a[1], (void* )a[2], a[3]);
       c->GPRx = fs_write(a[1], (void* )a[2], a[3]);
       break;
