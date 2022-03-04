@@ -17,8 +17,10 @@ int SDL_SetError(const char* fmt, ...) {
 }
 
 int SDL_ShowCursor(int toggle) {
+  panic("SDL_ShowCursor hasn't been implemented\n");
   return 0;
 }
 
 void SDL_WM_SetCaption(const char *title, const char *icon) {
+  panic("SDL_WM_SetCaption hasn't been implemented\n");
 }
