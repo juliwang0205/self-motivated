@@ -39,22 +39,16 @@ static int cmd_q(char *args) {
 }
 
 static int cmd_help(char *args);
-
 static int cmd_si(char *args);
-
 static int cmd_info(char *args);
-
 static int cmd_x(char *args);
-
 static int cmd_p(char *args);
-
 static int cmd_w(char *args);
-
 static int cmd_d(char *args);
-
 static int cmd_detach(char *args);
-
 static int cmd_attach(char *args);
+static int cmd_save(char *args);
+static int cmd_load(char *args);
 
 static struct {
   const char *name;
@@ -72,6 +66,8 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
   { "detach", "detach difftest mode", cmd_detach},
   { "attach", "attach difftest mode", cmd_attach},
+  { "save", "save shapshoot", cmd_save},
+  { "load", "load shapshoot", cmd_load},
   /* TODO: Add more commands */
 
 };
@@ -207,6 +203,38 @@ static int cmd_detach(char *args) {
 
 static int cmd_attach(char *args) {
   difftest_attach();
+  return 0;
+}
+
+static int cmd_save(char *args) {
+  char *arg = strtok(NULL, " ");
+  if(arg == NULL) {
+    Log("no path");
+  }
+  else {
+    FILE *fp = fopen(arg, "w");
+    assert(fp != NULL);
+    fwrite(&cpu, sizeof(cpu), 1, fp);
+    fwrite(guest_to_host(CONFIG_MBASE), CONFIG_MSIZE, 1, fp);
+    fclose(fp);
+  }
+  return 0;
+}
+
+static int cmd_load(char *args) {
+  char *arg = strtok(NULL, " ");
+  if(arg == NULL) {
+    Log("no path");
+  }
+  else {
+    FILE *fp = fopen(arg, "w");
+    assert(fp != NULL);
+    //FIX: error: ignoring return value of ‘fread’, declared with attribute warn_unused_result [-Werror=unused-result]
+    __attribute__((unused)) int ret;
+    ret = fread(&cpu, sizeof(cpu), 1, fp);
+    ret = fread(guest_to_host(CONFIG_MBASE), CONFIG_MSIZE, 1, fp);
+    fclose(fp);
+  }
   return 0;
 }
 
