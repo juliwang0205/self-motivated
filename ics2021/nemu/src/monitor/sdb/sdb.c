@@ -1,5 +1,6 @@
 #include <isa.h>
 #include <cpu/cpu.h>
+#include <cpu/difftest.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "sdb.h"
@@ -51,6 +52,10 @@ static int cmd_w(char *args);
 
 static int cmd_d(char *args);
 
+static int cmd_detach(char *args);
+
+static int cmd_attach(char *args);
+
 static struct {
   const char *name;
   const char *description;
@@ -65,7 +70,8 @@ static struct {
   { "w", "w EXPR, create watchpoint, every time the EXPR is changed, program is paused",cmd_w},
 	{ "d", "d N, delete the watchpoint whose number is N",cmd_d},
   { "q", "Exit NEMU", cmd_q },
-
+  { "detach", "detach difftest mode", cmd_detach},
+  { "attach", "attach difftest mode", cmd_attach},
   /* TODO: Add more commands */
 
 };
@@ -192,6 +198,16 @@ static int cmd_d(char *args)
 	else
 		printf("There is no watchpoint whose NO. is %d.\n",num);
 	return 0;
+}
+
+static int cmd_detach(char *args) {
+  difftest_detach();
+  return 0;
+}
+
+static int cmd_attach(char *args) {
+  difftest_attach();
+  return 0;
 }
 
 void sdb_set_batch_mode() {
