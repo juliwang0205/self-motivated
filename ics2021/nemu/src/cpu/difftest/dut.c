@@ -128,8 +128,8 @@ void difftest_attach() {
   is_disable_difftest = false;
   is_skip_ref = false;
   skip_dut_nr_instr = 0;
-  ref_difftest_memcpy(CONFIG_MBASE, guest_to_host(CONFIG_MBASE), CONFIG_MSIZE, DIFFTEST_TO_REF);
-  ref_difftest_regcpy(&cpu, DIFFTEST_TO_REF);
+
+  isa_difftest_attach();
 }
 
 #else

@@ -1,7 +1,7 @@
 #include <isa.h>
 #include <cpu/difftest.h>
 #include "../local-include/reg.h"
-
+#include <memory/paddr.h>
 bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
   uint16_t idx;
   
@@ -13,4 +13,6 @@ bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
 }
 
 void isa_difftest_attach() {
+  ref_difftest_memcpy(CONFIG_MBASE, guest_to_host(CONFIG_MBASE), CONFIG_MSIZE, DIFFTEST_TO_REF);
+  ref_difftest_regcpy(&cpu, DIFFTEST_TO_REF);
 }
