@@ -2,6 +2,15 @@
 #include "syscall.h"
 #include <device.h>
 #include <fs.h>
+#include <proc.h>
+
+void sys_execve(Context *c) {
+  char *fanme = (char *)c->GPR2;
+  char **argv = (char **)c->GPR3;
+  char **envp = (char **)c->GPR4;
+
+  c->GPRx = execve(fanme, argv, envp);
+}
 
 void do_syscall(Context *c) {
   //Log("do_syscall");
@@ -15,8 +24,9 @@ void do_syscall(Context *c) {
   switch (a[0]) {
     case SYS_exit:
       Log("SYS_exit");
-      halt(0);
-      c->GPRx = 0;
+      //halt(0);
+      //c->GPRx = 0;
+      c->GPRx = execve("/bin/nterm", NULL, NULL);
       break;
     case SYS_yield:
       Log("SYS_yield");
@@ -53,7 +63,9 @@ void do_syscall(Context *c) {
       //Log("SYS_gettimeofday");
       c->GPRx = sys_gettimeofday((struct timeval*)a[1], (struct timezone*)a[2]);
       break;
-
+    case SYS_execve:
+      sys_execve(c);
+      break;
     default: panic("Do syscall Unhandled syscall ID = %d", a[0]); break;
   }
 }

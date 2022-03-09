@@ -23,6 +23,22 @@ static void sh_prompt() {
 }
 
 static void sh_handle_cmd(const char *cmd) {
+  char command[128];
+  strcpy(command, cmd);
+  const char split[2] = " ";
+  char *token;
+  char *argv[16];
+  int argc = 0;
+
+  //get the first string
+  token = strtok(command, split);
+  //get the next string
+  while(token != NULL) {
+    argv[argc++] = token;
+    token = strtok(NULL, split);
+  }
+  argv[argc] = NULL;
+  execvp(argv[0], argv);
 }
 
 void builtin_sh_run() {

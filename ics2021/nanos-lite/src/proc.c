@@ -1,4 +1,5 @@
 #include <proc.h>
+#include <fs.h>
 
 #define MAX_NR_PROC 4
 
@@ -27,6 +28,13 @@ void init_proc() {
 
   // load program here
 
+}
+int execve(const char *fname, char * const argv[], char *const envp[]){
+  if(fs_open(fname, 0 , 0) == -1)
+   Log("%s cannot be found", fname);
+
+  naive_uload(NULL, fname);
+  return 0;
 }
 
 Context* schedule(Context *prev) {
