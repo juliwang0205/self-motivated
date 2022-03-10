@@ -5,6 +5,7 @@
 #include <proc.h>
 
 void sys_execve(Context *c) {
+  Log("sys_execve");
   char *fanme = (char *)c->GPR2;
   char **argv = (char **)c->GPR3;
   char **envp = (char **)c->GPR4;
@@ -24,9 +25,9 @@ void do_syscall(Context *c) {
   switch (a[0]) {
     case SYS_exit:
       Log("SYS_exit");
-      //halt(0);
-      //c->GPRx = 0;
-      c->GPRx = execve("/bin/nterm", NULL, NULL);
+      halt(0);
+      c->GPRx = 0;
+      //c->GPRx = execve("/bin/nterm", NULL, NULL);
       break;
     case SYS_yield:
       Log("SYS_yield");
