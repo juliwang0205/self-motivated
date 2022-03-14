@@ -50,6 +50,8 @@ __am_asm_trap:
   mv a0, sp                  # a0 store sp
   jal __am_irq_handle        # jump to __am_irq_handle
 
+  mv sp, a0
+
   LOAD t1, OFFSET_STATUS(sp) # pop mstatus to t1
   LOAD t2, OFFSET_EPC(sp)    # pop mepc to t2
   csrw mstatus, t1           # pop mstatus to t1

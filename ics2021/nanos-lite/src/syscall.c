@@ -4,13 +4,20 @@
 #include <fs.h>
 #include <proc.h>
 
-void sys_execve(Context *c) {
+static void sys_execve(Context *c) {
   Log("sys_execve");
   char *fanme = (char *)c->GPR2;
   char **argv = (char **)c->GPR3;
   char **envp = (char **)c->GPR4;
 
   c->GPRx = execve(fanme, argv, envp);
+}
+
+static void sys_yield(Context *c) {
+  Log("SYS_yield");
+  //yield();
+  schedule(c);
+  c->GPRx = 0;
 }
 
 void do_syscall(Context *c) {
@@ -25,14 +32,12 @@ void do_syscall(Context *c) {
   switch (a[0]) {
     case SYS_exit:
       Log("SYS_exit");
-      halt(0);
-      c->GPRx = 0;
-      //c->GPRx = execve("/bin/nterm", NULL, NULL);
+      //halt(0);
+      //c->GPRx = 0;
+      c->GPRx = execve("/bin/nterm", NULL, NULL);
       break;
     case SYS_yield:
-      Log("SYS_yield");
-      yield(); 
-      c->GPRx = 0;
+      sys_yield(c);
       break;
     case SYS_write:
       Log("SYS_write");

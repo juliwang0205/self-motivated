@@ -36,7 +36,16 @@ bool cte_init(Context*(*handler)(Event, Context*)) {
 }
 
 Context *kcontext(Area kstack, void (*entry)(void *), void *arg) {
-  return NULL;
+  // create a cte point to stack end
+  Context *cte = kstack.end - sizeof(Context);
+  // void epc point to entry
+  cte->mepc    = (uintptr_t)entry;
+  //to support difftest
+  cte->mstatus = 0x1800;
+  // get the arg
+  cte->gpr[10] = (uintptr_t)arg;
+  // return end as contxt
+  return cte;
 }
 
 void yield() {

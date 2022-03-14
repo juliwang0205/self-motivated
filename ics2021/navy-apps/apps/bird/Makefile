@@ -13,8 +13,8 @@ install: install-file
 init:;
 
 install-file:
-	$(shell if[! -d "$(NAVY_HOME)/fsimg/share/games/bird"]; then  mkdir -p $(NAVY_HOME)/fsimg/share/games/bird fi)
-	#$(shell mkdir -p $(NAVY_HOME)/fsimg/share/games/bird)
+	#if[! -d "$(NAVY_HOME)/fsimg/share/games/bird"]; then  mkdir -p $(NAVY_HOME)/fsimg/share/games/bird; fi
+	$(shell mkdir -p $(NAVY_HOME)/fsimg/share/games/bird)
 	$(shell cp $(abspath $(REPO_PATH)/res/* $(NAVY_HOME)/fsimg/share/games/bird))
 	#ln -sf -T $(abspath $(REPO_PATH)/res) $(NAVY_HOME)/fsimg/share/games/bird
 

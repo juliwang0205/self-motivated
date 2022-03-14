@@ -15,16 +15,25 @@ void switch_boot_pcb() {
 void hello_fun(void *arg) {
   int j = 1;
   while (1) {
-    Log("Hello World from Nanos-lite with arg '%p' for the %dth time!", (uintptr_t)arg, j);
+    Log("Hello World from Nanos-lite with arg '%s' for the %dth time!", (char *)arg, j);
     j ++;
     yield();
   }
 }
 
+void context_kload(PCB *pcb, void (*entry)(void *), void *arg) {
+  Area  karea;
+  karea.start = &pcb->cp;
+  karea.end   = &pcb->cp + STACK_SIZE;
+  pcb->cp = kcontext(karea, entry, arg);
+}
+
 void init_proc() {
+  context_kload(&pcb[0], hello_fun, "first");
+  context_kload(&pcb[0], hello_fun, "second");
   switch_boot_pcb();
   //naive_uload(NULL, "/bin/nterm");
-  naive_uload(NULL, "/bin/bird");
+  //naive_uload(NULL, "/bin/bird");
   Log("Initializing processes...");
 
   // load program here
@@ -40,5 +49,10 @@ int execve(const char *fname, char * const argv[], char *const envp[]){
 }
 
 Context* schedule(Context *prev) {
-  return NULL;
+  // dave the context pointer
+  current->cp = prev;
+  // always select pcb[0] as the new process
+  current = (current == &pcb[0] ? &pcb[1] : &pcb[0]);
+  // return the new context
+  return current->cp;
 }
