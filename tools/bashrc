@@ -109,11 +109,16 @@ alias gc='git commit'
 alias go='git checkout'
 alias ga='git add'
 alias gs='git status'
+alias gd='git diff'
 alias ..='cd ..'
 alias ..2='cd ../../'
 alias ..3='cd ../../../'
 alias ..4='cd ../../../../'
 alias ..5='cd ../../../../../'
+alias cputest='cd /home/ubuntu/self-motiveted/ics2021/am-kernels/tests/cpu-tests'
+alias nemu='cd /home/ubuntu/self-motiveted/ics2021/nemu'
+alias ics2021='cd /home/ubuntu/self-motiveted/ics2021'
+alias am-test='cd /home/ubuntu/self-motiveted/ics2021/am-kernels/tests/am-tests'
 # Alias definitions.
 # You may want to put all your additions into a separate file like
 # ~/.bash_aliases, instead of adding them here directly.
@@ -134,3 +139,8 @@ export PATH="/usr/lib/ccache:$PATH"
 
 export NEMU_HOME=/home/ubuntu/self-motiveted/ics2021/nemu
 export AM_HOME=/home/ubuntu/self-motiveted/ics2021/abstract-machine
+export NJU_HOME=/home/ubuntu/self-motiveted/ics2021
+export AK_HOME=/home/ubuntu/self-motiveted/ics2021/am-kernels
+export FA_HOME=/home/ubuntu/self-motiveted/ics2021/fceux-am
+
+export NAVY_HOME=/home/ubuntu/self-motiveted/ics2021/navy-apps

@@ -25,7 +25,7 @@ filetype off
 set rtp+=~/.vim/bundle/Vundle.vim
 
 call vundle#begin()
-"In VIM, how to highlight the user defined data type?
+"In VIM, how to highlight the user defined data type(typedef)?
 "https://stackoverflow.com/questions/54685249/in-vim-how-to-highlight-the-user-defined-data-type
 "https://vimawesome.com/plugin/c-syntax-vim
 Plugin 'nlknguyen/c-syntax.vim'
@@ -70,7 +70,9 @@ let Tlist_Exit_OnlyWindow=1
 noremap <F10> :TlistToggle<CR>
 
 let NERDTreeWinPos='right'
-let NERDTreeWinSize=60
+let NERDTreeWinSize=50
+let NERDTreeMinimalUI = 1
+let NERDTreeDirArrows = 1
 noremap <F9> :NERDTreeToggle<CR>
 
 if has("cscope")
@@ -89,6 +91,9 @@ endif
 
 set tags+=/home/ubuntu/NEMU/tags
 set tags+=/home/ubuntu/self-motiveted/ics2021/tags
+set tags+=/home/ubuntu/ICS-PA-2019/tags
+set tags+=/home/ubuntu/refs/ics2021/tags
+set tags+=/home/ubuntu/refs/NJU-ICS2021-PA/tags
 " more details about OmniCppComplete 
 " https://www.cxyzjd.com/article/yufengicd/8451963 
 let OmniCpp_NamespaceSearch = 2
@@ -143,7 +148,7 @@ let g:ycm_confirm_extra_conf = 0
 "edit in middle
 se so=999
 
-"update tags auto / F56to update tags
+"update tags auto F5 to update tags
 function! UpdateCtags()
     let curdir=getcwd()
     while !filereadable("./tags")
@@ -159,6 +164,6 @@ function! UpdateCtags()
     endif
     execute ":cd " . curdir
 endfunction
-nmap <F6> :call UpdateCtags()<CR>
+nmap <F5> :call UpdateCtags()<CR>
 "nmap <F5> :call UpdateCtags()<CR>
 
