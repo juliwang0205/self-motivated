@@ -1,9 +1,12 @@
 #include <proc.h>
 #include <fs.h>
-
-#define MAX_NR_PROC 4
+//#include <load.h>
 
 extern void naive_uload(PCB *pcb, const char *filename);
+extern void context_kload(PCB *pcb, void (*entry)(void *), void *arg);
+extern void context_uload(PCB *pcb, const char *filename, char *const argv[], char *const envp[]);
+#define MAX_NR_PROC 4
+
 static PCB pcb[MAX_NR_PROC] __attribute__((used)) = {};
 static PCB pcb_boot = {};
 PCB *current = NULL;
@@ -21,16 +24,10 @@ void hello_fun(void *arg) {
   }
 }
 
-void context_kload(PCB *pcb, void (*entry)(void *), void *arg) {
-  Area  karea;
-  karea.start = &pcb->cp;
-  karea.end   = &pcb->cp + STACK_SIZE;
-  pcb->cp = kcontext(karea, entry, arg);
-}
-
 void init_proc() {
   context_kload(&pcb[0], hello_fun, "first");
-  context_kload(&pcb[0], hello_fun, "second");
+  //context_kload(&pcb[1], hello_fun, "second");
+  context_uload(&pcb[1], "/bin/bird", NULL, NULL);
   switch_boot_pcb();
   //naive_uload(NULL, "/bin/nterm");
   //naive_uload(NULL, "/bin/bird");
@@ -44,7 +41,12 @@ int execve(const char *fname, char * const argv[], char *const envp[]){
   if(fs_open(fname, 0 , 0) == -1)
    Log("%s cannot be found", fname);
 
-  naive_uload(NULL, fname);
+  Log("loading %s", fname);
+  context_uload(&pcb[1], fname, argv, envp);
+  switch_boot_pcb();
+  
+  yield();
+  //naive_uload(NULL, fname);
   return 0;
 }
 
