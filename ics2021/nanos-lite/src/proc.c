@@ -1,10 +1,10 @@
 #include <proc.h>
 #include <fs.h>
-//#include <load.h>
+#include <load.h>
 
-extern void naive_uload(PCB *pcb, const char *filename);
-extern void context_kload(PCB *pcb, void (*entry)(void *), void *arg);
-extern void context_uload(PCB *pcb, const char *filename, char *const argv[], char *const envp[]);
+//extern void naive_uload(PCB *pcb, const char *filename);
+//extern void context_kload(PCB *pcb, void (*entry)(void *), void *arg);
+//extern void context_uload(PCB *pcb, const char *filename, char *const argv[], char *const envp[]);
 #define MAX_NR_PROC 4
 
 static PCB pcb[MAX_NR_PROC] __attribute__((used)) = {};
