@@ -12,7 +12,34 @@ typedef struct {
   vaddr_t mtvec;
   vaddr_t mepc;
   vaddr_t mcause;
-  vaddr_t mstatus;
+  union {
+    struct {
+      uint32_t UIE: 1;
+      uint32_t SIE: 1;
+      uint32_t WPRI_0: 1;
+      uint32_t MIE: 1;
+      uint32_t UPIE: 1;
+      uint32_t SPIE: 1;
+      uint32_t WPRI: 1;
+      uint32_t MPIE: 1;
+      uint32_t SPP: 1;
+      uint32_t WPRI_1_2: 1;
+      uint32_t MPP :1;
+      uint32_t FS :1;
+      uint32_t XS :1;
+      uint32_t MPRV :1;
+      uint32_t SUM :1;
+      uint32_t MXR :1;
+      uint32_t TVM :1;
+      uint32_t TW :1;
+      uint32_t TSR :1;
+      uint32_t WPRI_3_10 :1;
+      uint32_t SD :1;
+    }m;
+    vaddr_t value;
+  }mstatus;
+  rtlreg_t satp;
+  rtlreg_t mscratch;
 } riscv32_CPU_state;
 
 // decode
@@ -74,6 +101,6 @@ typedef struct {
   } instr;
 } riscv32_ISADecodeInfo;
 
-#define isa_mmu_check(vaddr, len, type) (MMU_DIRECT)
+#define isa_mmu_check(vaddr, len, type) (cpu.satp & (1ul << 31) ? MMU_TRANSLATE : MMU_DIRECT)
 
 #endif
